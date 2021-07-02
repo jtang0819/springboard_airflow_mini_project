@@ -5,7 +5,9 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 import os
 #DAG object
+
 from airflow import DAG
+
 
 def stonk(ticker):
     start_date = date.today()
@@ -15,7 +17,7 @@ def stonk(ticker):
 
 
 def python_command():
-    print(os.listdir('tmp/data/2020/2020-09-24'))
+    print(os.listdir('../tmp/data/2020/2020-09-24'))
 
 default_args = {
     'owner': 'airflow',
