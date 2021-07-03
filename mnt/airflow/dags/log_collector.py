@@ -14,7 +14,7 @@ def analyze_file(file):
     # if line has ERROR add error message to error_list
     count_error = 0
     error_list = []
-	file_list = [f for f in rootdir..glob('**/*' if f.is_file())]
+	file_list = [f for f in rootdir.glob('**/*' if f.is_file())]
 	
     return count_error, error_list
 
