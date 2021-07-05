@@ -1,10 +1,16 @@
+import glob
+import os
+from datetime import timedelta, datetime
 from pathlib import Path
+
+from airflow import DAG
 from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
 
-rootdir = Path('opt/airflow/logs/').rglob('*.log')
+root_dir = Path('logs')
 
 
-def analyze_file(file):
+def analyze_file():
     # TODO add function to return-
     # - The total count of error entries from this file
     # - A list of error message details (the errors themself)
@@ -14,10 +20,13 @@ def analyze_file(file):
     # if line has ERROR add error message to error_list
     count_error = 0
     error_list = []
-	file_list = [f for f in rootdir.glob('**/*' if f.is_file())]
-	
-    return count_error, error_list
-
+    for filename in Path(root_dir).rglob('*.log'):
+        with open(filename, 'r') as f:
+            for line in f:
+                if "ERROR" in line:
+                    count_error += 1
+                    error_list.append(line)
+    return "Number of errors: " + str(count_error), "Here are the errors: ", error_list
 
 
 default_args = {
@@ -38,8 +47,8 @@ with DAG(
     schedule_interval='@once'
 ) as dag:
 
-    t0 = BashOperator(
-        task_id='make_tmp',
-        bash_command=commands_t0
+    t0 = PythonOperator(
+        task_id='analyze_logs',
+        python_callable=analyze_file
 
     )
