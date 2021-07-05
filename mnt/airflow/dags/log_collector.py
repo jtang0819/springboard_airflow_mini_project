@@ -11,7 +11,6 @@ root_dir = Path('logs')
 
 
 def analyze_file():
-    # TODO add function to return-
     # - The total count of error entries from this file
     # - A list of error message details (the errors themself)
     # read file
